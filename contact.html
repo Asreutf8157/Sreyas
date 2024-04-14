@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top wearing</title>
+  <style>
+    /* Your existing CSS styles */
+  </style>
+</head>
+<body>
+  <!-- Your existing menu -->
+  <ul class="menu">
+    <!-- Menu items -->
+  </ul>
+
+  <!-- Your existing carousels -->
+  <div class="carousel-container" id="men-carousel"> <!-- Added an id for identification -->
+    <!-- Carousel for men's images -->
+  </div>
+  <button class="carousel-button carousel-button-left" onclick="moveSlide(-1, 'men-carousel')">❮</button>
+  <button class="carousel-button carousel-button-right" onclick="moveSlide(1, 'men-carousel')">❯</button>
+
+  <!-- Additional carousel for children's images -->
+  <div class="carousel-container" id="child-carousel"> <!-- Added an id for identification -->
+    <!-- Carousel for children's images -->
+  </div>
+  <button class="carousel-button carousel-button-left" onclick="moveSlide(-1, 'child-carousel')">❮</button>
+  <button class="carousel-button carousel-button-right" onclick="moveSlide(1, 'child-carousel')">❯</button>
+
+  <!-- Your existing JavaScript -->
+  <script>
+    let slideIndexes = {
+      'men-carousel': 0,
+      'child-carousel': 0
+    };
+
+    function moveSlide(n, carouselId) {
+      const carousel = document.getElementById(carouselId);
+      const carouselItems = carousel.querySelectorAll('.carousel-item');
+      slideIndexes[carouselId] += n;
+      if (slideIndexes[carouselId] >= carouselItems.length) {
+        slideIndexes[carouselId] = 0;
+      }
+      if (slideIndexes[carouselId] < 0) {
+        slideIndexes[carouselId] = carouselItems.length - 1;
+      }
+      const offset = -slideIndexes[carouselId] * 100 + '%';
+      carousel.style.transform = `translateX(${offset})`;
+      updateDots(carouselId);
+    }
+
+    function updateDots(carouselId) {
+      const dotContainer = document.querySelector(`#${carouselId} ~ .dot-container`);
+      dotContainer.innerHTML = '';
+      const carousel = document.getElementById(carouselId);
+      const carouselItems = carousel.querySelectorAll('.carousel-item');
+      carouselItems.forEach((item, index) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        if (index === slideIndexes[carouselId]) {
+          dot.classList.add('active');
+        }
+        dot.onclick = () => {
+          slideIndexes[carouselId] = index;
+          moveSlide(0, carouselId);
+        };
+        dotContainer.appendChild(dot);
+      });
+    }
+
+    updateDots('men-carousel');   // Initial update for the men's carousel
+    updateDots('child-carousel'); // Initial update for the children's carousel
+  </script>
+</body>
+</html>
